@@ -128,6 +128,33 @@ const importData = async () => {
     console.log(`${productDocs.length} Products Imported`.green.bold);
     console.log(`${reviewDocs.length} Reviews Imported`.green.bold);
 
+    async function updateAllProductRatings() {
+  try {
+    const aggregation = await Review.aggregate([
+      {
+        $group: {
+          _id: "$product",
+          avgRating: { $avg: "$rating" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    for (const item of aggregation) {
+      await Product.findByIdAndUpdate(item._id, {
+        overall_rating: item.avgRating,
+        total_reviews: item.count,
+      });
+      console.log(`Updated product ${item._id}: avgRating=${item.avgRating}, totalReviews=${item.count}`);
+    }
+    console.log("All product ratings and review counts updated.");
+  } catch (error) {
+    console.error("Error updating product ratings:", error);
+  }
+}
+
+    await updateAllProductRatings();
+
     process.exit();
   } catch (error) {
     console.error(`${error}`.red.inverse);

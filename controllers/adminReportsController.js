@@ -65,7 +65,10 @@ const orderStatusCounts = async (req, res) => {
       },
       {
         $project: {
-          status: "$_id",
+          status: {
+            // ✅ "Processing" ko frontend ke liye "Pending" rename kar diya
+            $cond: [{ $eq: ["$_id", "Processing"] }, "Pending", "$_id"],
+          },
           count: 1,
           _id: 0,
         },
@@ -109,7 +112,7 @@ const topProducts = async (req, res) => {
       {
         $project: {
           productId: "$product._id",
-          name: "$product.product_name",
+          name: { $ifNull: ["$product.product_name", "$product.name"] },
           brand: "$product.brand",
           totalQty: 1,
           totalRevenue: 1,
@@ -124,4 +127,21 @@ const topProducts = async (req, res) => {
   }
 };
 
-export { salesByCategory, orderStatusCounts, topProducts };
+// controllers/adminReportsController.js
+
+const getRecentOrders = async (req, res) => {
+  try {
+    const limit = Number(req.query.limit) || 5;
+    const orders = await Order.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate("user", "name email");
+    res.json({ orders });
+  } catch (err) {
+    console.error("getRecentOrders:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export { salesByCategory, orderStatusCounts, topProducts, getRecentOrders };

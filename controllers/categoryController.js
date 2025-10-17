@@ -55,7 +55,14 @@ const getCategoryById = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    res.json(category);
+     // ✅ us category ke products bhi fetch karo
+    const products = await Product.find({ category: category._id });
+
+    res.json({
+      ...category.toObject(),
+      products, // add products array in response
+    });
+    // res.json(category);
   } catch (err) {
     console.error("getCategoryById:", err);
     res.status(500).json({ message: "Server error" });

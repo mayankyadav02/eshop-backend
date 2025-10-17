@@ -39,8 +39,9 @@ const createReview = async (req, res) => {
 
     // Recalculate average rating
     const reviews = await Review.find({ product: productId });
-    product.rating =
-      reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+    product.overall_rating =
+      reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1);
+    product.total_reviews = reviews.length;
     await product.save();
 
     res.json({ message: "Review submitted successfully" });

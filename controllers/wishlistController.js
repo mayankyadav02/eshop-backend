@@ -13,6 +13,7 @@ const getWishlist = async (req, res) => {
     console.error("getWishlist error:", err);
     res.status(500).json({ message: "Server Error" });
   }
+
 };
 
 // @desc    Add product to wishlist

@@ -34,6 +34,7 @@ const productSchema = mongoose.Schema(
     // numeric rating fields (store as Number for aggregations)
     product_rating: { type: Number, default: 0 },
     overall_rating: { type: Number, default: 0 },
+    total_reviews: { type: Number, default: 0 },
 
     brand: { type: String, default: "" },
 

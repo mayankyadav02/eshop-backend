@@ -69,8 +69,8 @@ export const previewProductsFromCSV = () => {
       }
     })
     .on("end", () => {
-    //   console.log(" Preview of first 10 products from Kaggle dataset:");
-    //   console.table(results); // table format me console
+      // console.log(" Preview of first 10 products from Kaggle dataset:");
+      // console.table(results); // table format me console
     });
 };
 

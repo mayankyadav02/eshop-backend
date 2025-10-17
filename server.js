@@ -1,4 +1,5 @@
 // server.js
+import path, { dirname } from "path";
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
@@ -21,6 +22,8 @@ import adminProductRoutes from "./routes/adminProductRoutes.js";
 import adminReportsRoutes from "./routes/adminReportsRoutes.js";
 import csvRoutes from "./routes/csvRoutes.js"; // CSV Preview
 import Category from "./models/category.js";
+import multer from "multer";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 connectDB();
@@ -30,7 +33,10 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
@@ -53,11 +59,34 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api/analytics", analyticsRoutes);
+app.use("/api/admin", analyticsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/products", adminProductRoutes);
 app.use("/api/admin/reports", adminReportsRoutes);
+app.use("/api/admin/categories", categoryRoutes);
+
 app.use("/api/csv", csvRoutes); // CSV preview (admin restricted)
+
+// uploads folder ko static access dena
+// const __dirname = path.resolve();
+// app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+// ✅ Fix __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// ✅ Serve uploads folder statically
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Multer error handling (important!)
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ message: err.message });
+  } else if (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  next();
+});
 
 // Error Handling
 app.use(notFound);
