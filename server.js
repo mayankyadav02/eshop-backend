@@ -51,6 +51,9 @@ app.get("/api", (req, res) => {
 //   res.json(cats);
 // });
 
+// ✅ Health check endpoint
+app.get("/healthz", (req, res) => res.send("OK"));
+
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
