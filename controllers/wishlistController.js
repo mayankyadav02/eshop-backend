@@ -1,5 +1,5 @@
 // controllers/wishlistController.js
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Product from "../models/Product.js";
 
 // @desc    Get logged-in user's wishlist

@@ -1,5 +1,5 @@
 // controllers/adminController.js
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Order from "../models/Order.js";
 
 // Get all users

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 /**
  * @desc    Protect routes (only logged in users can access)
