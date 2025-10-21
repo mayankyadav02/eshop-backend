@@ -32,7 +32,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://eshop-frontend-public-s4m1-q3ta9yodx-mayankyadav02s-projects.vercel.app/", // ✅ your Vercel frontend
+  "https://eshop-frontend-public-s4m1-q3ta9yodx-mayankyadav02s-projects.vercel.app", // ✅ your Vercel frontend
 ];
 
 
