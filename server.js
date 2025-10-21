@@ -32,8 +32,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:5173", // for local vite dev
-  "https://eshop-frontend-public-s4m1.vercel.app", // ✅ your Vercel frontend
+  "https://eshop-frontend-public-s4m1-6645qb4o9-mayankyadav02s-projects.vercel.app", // ✅ your Vercel frontend
 ];
 
 
@@ -44,19 +43,18 @@ app.use(express.urlencoded({ extended: true }));
 //   origin: "http://localhost:3000",
 //   credentials: true
 // }));
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.log("❌ Blocked by CORS:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true); // mobile apps or curl requests
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
