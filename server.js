@@ -32,7 +32,8 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://eshop-frontend-public-s4m1-c964s9yd8-mayankyadav02s-projects.vercel.app", // ✅ your Vercel frontend
+  "https://eshop-frontend-public-s4m1.vercel.app", 
+  "https://eshop-frontend-public-s4m1-c964s9yd8-mayankyadav02s-projects.vercel.app"
 ];
 
 
@@ -46,7 +47,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes("vercel.app") || origin.includes("localhost")) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
