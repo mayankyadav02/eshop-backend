@@ -30,31 +30,31 @@ connectDB();
 
 const app = express();
 
-// const allowedOrigins = [
-//   "http://localhost:3000",
-//   "https://eshop-frontend-public-s4m1-q3ta9yodx-mayankyadav02s-projects.vercel.app", // ✅ your Vercel frontend
-// ];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://eshop-frontend-public-s4m1-c964s9yd8-mayankyadav02s-projects.vercel.app", // ✅ your Vercel frontend
+];
 
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: "https://eshop-frontend-public-s4m1-q3ta9yodx-mayankyadav02s-projects.vercel.app",
-  credentials: true
-}));
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true, // agar cookies ya auth tokens use karte ho
-//   })
-// );
+// app.use(cors({
+//   origin: "http://localhost:3000",
+//   credentials: true
+// }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // agar cookies ya auth tokens use karte ho
+  })
+);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
